@@ -1,0 +1,34 @@
+{
+  "name": "webrtc2osc",
+  "version": "1.0.0",
+  "description": "Web to OSC bridge using PeerjS WebRTC",
+  "main": "webrtc2osc.mjs",
+  "bin": {
+    "webrtc2osc": "./cli.mjs"
+  },
+  "scripts": {
+    "start": "node ./cli.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webrtc",
+    "peerjs",
+    "osc",
+    "opensoundcontrol"
+  ],
+  "author": "Mark Marijnissen",
+  "license": "MIT",
+  "dependencies": {
+    "@koush/wrtc": "^0.5.3",
+    "address": "^1.2.2",
+    "debug": "^4.3.4",
+    "filereader": "^0.10.3",
+    "node-fetch": "^3.3.1",
+    "osc-js": "^2.4.0",
+    "peerjs": "^2.0.0-beta.3",
+    "qrcode-terminal": "^0.12.0",
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0",
+    "yargs": "^17.7.1"
+  }
+}
