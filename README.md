@@ -10,7 +10,7 @@ It uses the excellent [PeerJS](https://peerjs.com/) and [osc-js](https://github.
 
 ## Usage
 
-```bash
+```
 npx webrtc2osc --peer-id MY_PEER_ID --host localhost --send 11000 --receive 11011 --url http://{ip}:3000/?peerId={peerId} --qr
 ```
 
@@ -29,14 +29,14 @@ Use PeerJS to send and receive arrays of `[ address, ...args ]`. Use the `json` 
 
 ```javascript
 const peer = new Peer();
-const conn = peer.connect("AbletonController", { serialization: "json" });
+const conn = peer.connect("MY_PEER_ID", { serialization: "json" });
 conn.send(['/say', 'hello world']); // note the array
 conn.on('data', ([ address, ...args]) => { // note the array
     console.log(address, args);
 })
 ```
 
-PS. Creating an osc-js is not possible, because plugins need to send binary data, and there is no way I can unpack that on the server side.
+PS. Creating an osc-js Plugin is not possible, because plugins need to send binary data, and there is no way I can unpack that on the server side.
 
 ## Changelog
 
