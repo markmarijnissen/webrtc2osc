@@ -14,7 +14,7 @@ It uses the excellent [PeerJS](https://peerjs.com/) and [osc-js](https://github.
 npx webrtc2osc --peer-id MY_PEER_ID --host localhost --send 11000 --receive 11011 --url http://{ip}:3000/?peerId={peerId} --qr
 ```
 
-- `--peer-id`: The peer id you can connect to.
+- `--peer-id`: The peer id of the webrtc2osc bridge app.
 - `--host`: The host address of the OSC server.
 - `--send`: The port to send messages to.
 - `--receive`: The port to receive messages from.
