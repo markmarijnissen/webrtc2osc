@@ -9,12 +9,17 @@ import address from "address";
 import qr from "qrcode-terminal";
 import debug from "debug";
 
-debug.enable('webrtc2osc');
 const log = debug('webrtc2osc');
 const argv = yargs(hideBin(process.argv)).argv || {};
 const confFile = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'webrtc2osc.json');
 const confFileExists = await fs.access(confFile).then(() => true, () => false);
 const config = confFileExists ? JSON.parse(await fs.readFile(confFile)) : {};
+
+
+debug.enable('webrtc2osc');
+if (argv.log) {
+    debug.enable('webrtc2osc:msg,webrtc2osc');
+}
 
 const defaultConfig = {
     peerId: uuid(),
@@ -41,7 +46,7 @@ if (Object.keys(argv).length > 2 || !confFileExists) {
 }
 if (typeof config.url === 'string' && config.url.length > 0) {
     config.url = config.url.replace("{peerId}", config.peerId).replace("{ip}", address.ip());
-    console.log(config.url);
+    log(config.url);
     if (argv.qr) {
         qr.generate(config.url);
     }

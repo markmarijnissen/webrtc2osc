@@ -7,11 +7,12 @@ import WebRTC from '@koush/wrtc';
 import FileReader from 'filereader';
 
 const { Peer } = peerjs;
-const log = debug('webrtc2osc');
+const logger = debug('webrtc2osc');
+const msgLogger = debug('webrtc2osc:msg');
 const polyfills = { fetch, WebSocket, WebRTC, FileReader };
 
 export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, receive = 11001 }) {
-    log({
+    logger({
         peerId,
         host,
         send,
@@ -33,15 +34,15 @@ export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, r
         })
     });
     peer.on('open', id => {
-        log('open', id);
+        logger('open', id);
     });
     peer.on('connection', conn => {
         conn.on('open', () => {
-            log('peer connected', conn.peer);
+            logger('peer connected', conn.peer);
             peerConnections[conn.peer] = conn;
         });
         conn.on('close', () => {
-            log('peer disconnected', conn.peer);
+            logger('peer disconnected', conn.peer);
             delete peerConnections[conn.peer];
         });
         conn.on('error', err => {
@@ -49,18 +50,18 @@ export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, r
             delete peerConnections[conn.peer];
         });
         conn.on('data', data => {
-            log('peer>osc', ...data);
+            msgLogger('peer>osc', ...data);
             osc.send(new OSC.Message(...data));
         });
     })
     osc.on('/*', (msg) => {
         Object.values(peerConnections).forEach(conn => {
-            log('osc>peer', msg.address, ...msg.args);
+            msgLogger('osc>peer', msg.address, ...msg.args);
             conn.send([msg.address, ...msg.args]);
         });
     })
     osc.on('error', err => {
-        log('osc error', err);
+        logger('osc error', err);
     })
     osc.open();
 }

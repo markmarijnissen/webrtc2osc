@@ -11,7 +11,14 @@ It uses the excellent [PeerJS](https://peerjs.com/) and [osc-js](https://github.
 ## Usage
 
 ```
-npx webrtc2osc --peer-id MY_PEER_ID --host localhost --send 11000 --receive 11011 --url http://{ip}:3000/?peerId={peerId} --qr
+npx webrtc2osc 
+    --peer-id MY_PEER_ID 
+    --host localhost 
+    --send 11000 
+    --receive 11011 
+    --url "http://{ip}:3000/?peerId={peerId}" 
+    --qr 
+    --log
 ```
 
 - `--peer-id`: The peer id of the webrtc2osc bridge app.
@@ -20,6 +27,7 @@ npx webrtc2osc --peer-id MY_PEER_ID --host localhost --send 11000 --receive 1101
 - `--receive`: The port to receive messages from.
 - `--url`: Generate an URL. `{peerId}` is replaced by the (generated) peerId, and `{ip}` is replaced by the IP address of your machine.
 - `--qr`: Display QR code of the URL
+- `--log`: log all messages
 
 Settings are saved `webrtc2osc.json` in your HOME directory, so next time you can call `npx webrtc2osc` (without arguments).
 
@@ -40,5 +48,6 @@ PS. Creating an osc-js Plugin is not possible, because plugins need to send bina
 
 ## Changelog
 
+- 1.0.1 Add --log parameter
 - 1.0.0 Add URL and QR code.
 - 0.9.0 Initial release.
