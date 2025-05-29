@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Web to OSC bridge using PeerjS WebRTC",
   "main": "webrtc2osc.mjs",
+  "type": "module",
   "bin": {
     "webrtc2osc": "./cli.mjs"
   },

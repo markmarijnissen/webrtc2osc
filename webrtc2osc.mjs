@@ -12,15 +12,15 @@ const msgLogger = debug('webrtc2osc:msg');
 const polyfills = { fetch, WebSocket, WebRTC, FileReader };
 
 export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, receive = 11001 }) {
+
     logger({
         peerId,
         host,
         send,
         receive,
     })
-    
+
     const peerConnections = {};
-    const peer = new Peer(peerId, { polyfills });
     const osc = new OSC({
         plugin: new OSC.DatagramPlugin({
             open: {
@@ -33,6 +33,17 @@ export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, r
             }
         })
     });
+    osc.on('/*', (msg) => {
+        Object.values(peerConnections).forEach(conn => {
+            msgLogger('osc>peer', msg.address, ...msg.args);
+            conn.send([msg.address, ...msg.args]);
+        });
+    })
+    osc.on('error', err => {
+        logger('osc error', err);
+    })
+
+    const peer = new Peer(peerId, { polyfills });
     peer.on('open', id => {
         logger('open', id);
     });
@@ -53,15 +64,20 @@ export default function webrtc2osc({ peerId, host = 'localhost', send = 11000, r
             msgLogger('peer>osc', ...data);
             osc.send(new OSC.Message(...data));
         });
-    })
-    osc.on('/*', (msg) => {
-        Object.values(peerConnections).forEach(conn => {
-            msgLogger('osc>peer', msg.address, ...msg.args);
-            conn.send([msg.address, ...msg.args]);
-        });
-    })
-    osc.on('error', err => {
-        logger('osc error', err);
-    })
+    });
+    peer.on('disconnected', () => {
+        logger('lost connection, reconnecting');
+        peer.reconnect();
+    });
+
     osc.open();
+
+    return {
+        peerId,
+        host,
+        send,
+        receive,
+        peer,
+        osc
+    }
 }

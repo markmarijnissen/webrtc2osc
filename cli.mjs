@@ -10,11 +10,11 @@ import qr from "qrcode-terminal";
 import debug from "debug";
 
 const log = debug('webrtc2osc');
+
 const argv = yargs(hideBin(process.argv)).argv || {};
 const confFile = path.join(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'], 'webrtc2osc.json');
 const confFileExists = await fs.access(confFile).then(() => true, () => false);
 const config = confFileExists ? JSON.parse(await fs.readFile(confFile)) : {};
-
 
 debug.enable('webrtc2osc');
 if (argv.log) {
@@ -52,4 +52,4 @@ if (typeof config.url === 'string' && config.url.length > 0) {
     }
 }
 
-webrtc2osc(config);
+export default webrtc2osc(config);
